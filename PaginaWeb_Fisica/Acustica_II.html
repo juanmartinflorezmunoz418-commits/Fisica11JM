@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!--TIPOGRAFÍA-->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+
+  <!--POLYFILL PARA COMPATIBILIDAD -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+  <!--CONFIGURACIÓN DE MATHJAX -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']]
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <!--ESTILOS PRINCIPALES -->
+  <style>
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+body {
+  margin: 0;
+  font-family: 'Merriweather', serif;
+  font-size: 1.15rem;        
+  background: linear-gradient(180deg, #f9f9f9 0%, #eef2ff 100%);
+  color: #222;
+  line-height: 1.7;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  scroll-behavior: smooth;
+}
+
+h1 {
+  font-size: 3rem;           
+  text-align: center;
+  margin: 2rem 0 1.5rem 0;
+  animation: fadeInDown 1s ease;
+}
+
+h2 {
+  font-size: 2.5rem;       
+  border-bottom: 3px solid #3a86ff;
+  padding-bottom: 0.4rem;
+  margin-top: 2rem;
+}
+
+h3 {
+  font-size: 2rem;       
+  margin-top: 1.5rem;
+  color: #333;
+}
+
+p {
+  margin-bottom: 0.5rem;
+  font-size: 1.7rem;     
+  max-width: 900px;
+  line-height: 1.9;
+}
+
+li {
+  font-size: 1.7rem
+}
+
+main {
+    flex-grow: 1;
+    max-width: 950px;
+    margin: 0 auto 3rem auto;
+    padding: 0 1.5rem;
+  }
+
+  nav {
+    background: #3a86ff;
+    position: sticky;
+    width: 100%;
+    top: 0;
+    z-index: 1100;
+    user-select: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+  }
+
+  .nav-left, .nav-center, .nav-right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+
+  .nav-left { justify-content: flex-start; }
+  .nav-right { justify-content: flex-end; }
+
+  /* menú */
+  nav .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  nav .dropbtn {
+    background: #1e40af;
+    color: white;
+    padding: 0.5rem 1.2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  nav .dropbtn:hover {
+    background: #162f78;
+  }
+
+  nav .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 200px;
+    border-radius: 10px;
+    z-index: 1000;
+  }
+
+  nav .dropdown-content a {
+    color: #333;
+    padding: 0.8rem 1rem;
+    text-decoration: none;
+    display: block;
+    font-size: 0.95rem;
+    transition: background 0.2s ease;
+  }
+
+  nav .dropdown-content a:hover {
+    background-color: #e5e7eb;
+  }
+
+  nav .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+  /* ------------------------- */
+  /* BOTONES PERSONALIZADOS */
+  /* ------------------------- */
+  .btn-lab {
+    display: inline-block;
+    padding: 12px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    box-shadow: 0 6px 14px rgba(79, 172, 254, 0.4);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    border: none; /* 🔹 sin borde */
+  }
+
+  .btn-lab::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: skewX(-20deg);
+    transition: left 0.5s ease;
+  }
+
+  .btn-lab:hover::before { left: 100%; }
+
+  .btn-lab:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 8px 18px rgba(79, 172, 254, 0.6);
+  }
+
+  .btn-lab:active {
+    transform: translateY(0) scale(0.97);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }
+
+  /* ------------------------- */
+  /* ENCABEZADO PRINCIPAL */
+  /* ------------------------- */
+  .hero {
+    width: 100%;
+    height:30vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: linear-gradient(135deg, #1e3c72, #2a5298, #00c6ff);
+    background-size: 300% 300%;
+    animation: fondoOndas 10s ease infinite;
+  }
+
+  .titulo-sonido {
+    font-size: clamp(2rem, 6vw, 5rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    color: #fff;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    text-shadow: 
+      0 0 10px rgba(255,255,255,0.6),
+      0 0 20px rgba(79,172,254,0.9),
+      0 0 40px rgba(0,242,254,0.8);
+  }
+
+  .titulo-sonido::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, rgba(255,255,255,0.5) 0%, transparent 80%);
+    transform: skewX(-25deg);
+    animation: shine 4s infinite;
+  }
+
+  /* ------------------------- */
+  /* CAJAS DE CONTENIDO */
+  /* ------------------------- */
+  .example {
+    background: #ffffff;
+    border-left: 6px solid #3a86ff;
+    padding: 1.5rem 2rem;
+    margin: 1.5rem 0;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    max-width: 700px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .example:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  }
+
+  .formula {
+    background: #eef2ff;
+    border-left: 6px solid #3a86ff;
+    padding: 1.2rem 2rem;
+    margin: 1.5rem 0;
+    font-size: 1.3rem;
+    font-weight: 700;
+    border-radius: 10px;
+    max-width: 700px;
+    font-family: 'Roboto Mono', monospace;
+    color: #1e40af;
+    box-shadow: 0 4px 15px rgba(58, 134, 255, 0.3);
+  }
+
+  /* ------------------------- */
+  /* FOOTER */
+  /* ------------------------- */
+  footer {
+    background: #3a86ff;
+    color: #fff;
+    padding: 1.5rem 0;
+    margin-top: 3rem;
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.15);
+  }
+
+  .footer-container {
+    max-width: 950px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .social-icons {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .social-icons a img {
+    width: 38px;
+    height: 38px;
+    filter: invert(100%);
+    transition: transform 0.3s ease, filter 0.3s ease;
+  }
+
+  .social-icons a img:hover {
+    transform: scale(1.2);
+    filter: invert(71%) sepia(92%) saturate(2901%) hue-rotate(311deg) brightness(95%) contrast(90%);
+  }
+
+  .bibliografia a {
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    background: #1e40af;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+  }
+
+  .bibliografia a:hover {
+    background: #0f2d6d;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  }
+
+  /* ------------------------- */
+  /* TEMA OSCURO */
+  /* ------------------------- */
+  body.dark-mode {
+    background: linear-gradient(180deg, #1a1a1a 0%, #2c2c2c 100%);
+    color: #f1f1f1;
+  }
+
+  body.dark-mode h1, 
+  body.dark-mode h2, 
+  body.dark-mode h3 {
+    color: #ffffff;
+  }
+
+  body.dark-mode nav {
+    background: #111827;
+  }
+
+  body.dark-mode .dropbtn {
+    background: #2563eb;
+  }
+
+  body.dark-mode .dropdown-content {
+    background: #1f2937;
+  }
+
+  body.dark-mode .dropdown-content a {
+    color: #f9fafb;
+  }
+
+  body.dark-mode .dropdown-content a:hover {
+    background-color: #374151;
+  }
+
+  body.dark-mode .formula {
+    background: #2d3748;
+    border-left: 6px solid #60a5fa;
+    color: #fbbf24;
+  }
+
+  body.dark-mode .example {
+    background: #1f2937;
+    border-left: 6px solid #f87171;
+    color: #f3f4f6;
+  }
+
+  body.dark-mode footer {
+    background: #111827;
+  }
+
+  body.dark-mode .bibliografia a {
+    background: #2563eb;
+  }
+
+  /* ------------------------- */
+  /* ANIMACIONES */
+  /* ------------------------- */
+  @keyframes fondoOndas {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  @keyframes shine {
+    0% { left: -75%}
+    100% {left: 91% }
+  }
+
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  section {
+    animation: fadeInUp 0.8s ease;
+    scroll-margin-top: 80px;
+  }
+  </style>
+</head>
+  <body>
+  <nav aria-label="Menú de navegación principal">
+  <!-- Izquierda: Tema -->
+  <div class="nav-left">
+    <button id="theme-toggle" class="btn-lab" aria-label="Cambiar tema">🌙</button>
+  </div>
+
+  <!-- Centro: Secciones -->
+  <div class="nav-center">
+    <div class="dropdown">
+      <button class="btn-lab">📚 Secciones</button>
+      <div class="dropdown-content">
+        <a href="#doppler">Efecto Doppler</a>
+        <a href="#ondas-estacionarias">Ondas Estacionarias</a>
+        <a href="#cuerda-instrumento">Cuerda Musical</a>
+        <a href="#velocidad-cuerda">Velocidad en Cuerda</a>
+        <a href="#tubos">Tubos Sonoros</a>
+        <a href="#voz">La Voz</a>
+        <a href="#summary">Resumen</a>
+        <a href="#questions">Preguntas</a>
+      </div>
+    </div>
+  </div>
+  <!-- Derecha: Laboratorios -->
+  <div class="nav-right">
+    <a href="laboratorios.html" class="btn-lab" aria-label="Ir a la sección de laboratorios">🔬 Laboratorios</a>
+  </div>
+</nav>
+<script>
+  const toggleBtn = document.getElementById("theme-toggle");
+  const body = document.body;
+
+  toggleBtn.addEventListener("click", () => {
+    body.classList.toggle("dark-mode");
+
+    if (body.classList.contains("dark-mode")) {
+      toggleBtn.textContent = "☀️";
+    } else {
+      toggleBtn.textContent = "🌙";
+    }
+  });
+</script>
+  </nav>
+<section class="hero">
+  <h1 class="titulo-sonido">Física del Sonido</h1>
+</section>
+  <main>
+
+  <section id="doppler" tabindex="-1">
+    <h2>Efecto Doppler</h2>
+    <p>
+      El efecto Doppler ocurre cuando la frecuencia percibida de una onda cambia debido al movimiento relativo entre la fuente y el observador.
+    </p>
+    <div class="formula" aria-label="Fórmula del efecto Doppler">
+      \[ f' = f \times \frac{v \pm v_o}{v \mp v_s} \] <br>
+      Donde: <br>
+      • \( f \) = frecuencia real emitida <br>
+      • \( v \) = velocidad del sonido en el aire (≈ 340 m/s) <br>
+      • \( v_o \) = velocidad del observador <br>
+      • \( v_s \) = velocidad de la fuente
+    </div>
+    <div class="example" aria-label="Ejemplo del efecto Doppler">
+      <p><b>Ejemplo:</b> Una ambulancia se acerca a 30 m/s con sirena de 500 Hz.</p>
+      <p>
+        \[ f' = 500 \times \frac{340}{340 - 30} = 500 \times \frac{340}{310} \approx 548 \text{ Hz} \]
+      </p>
+      <p>El observador escucha un tono más agudo.</p>
+    </div>
+    <div class="img-container">
+      <img src="Efecto Doppler.png" 
+     alt="Efecto Doppler" 
+     style="max-width: 700px; height: auto; display: block; margin: 1rem auto;">
+    </div>
+  </section>
+
+  <section id="ondas-estacionarias" tabindex="-1">
+  <h2>Ondas Estacionarias</h2>
+  <p>
+    Las ondas estacionarias se forman cuando dos ondas de igual frecuencia y amplitud viajan en direcciones opuestas y se superponen, generando nodos (puntos fijos) y antinodos (máxima vibración).
+  </p>
+  <div class="formula" aria-label="Ecuación de ondas estacionarias">
+    \[ y(x,t) = 2A \cdot \sin(kx) \cdot \cos(\omega t) \] <br>
+    Donde: <br>
+    • \( y(x,t) \) = desplazamiento de la onda en la posición \(x\) y el tiempo \(t\) <br>
+    • \( A \) = amplitud de la onda <br>
+    • \( k = \tfrac{2\pi}{\lambda} \) = número de onda <br>
+    • \( x \) = posición a lo largo de la cuerda <br>
+    • \( \omega = 2\pi f \) = frecuencia angular <br>
+    • \( t \) = tiempo <br>
+    • \( \lambda \) = longitud de onda <br>
+    • \( f \) = frecuencia
+  </div>
+  <div class="example" aria-label="Ejemplo de ondas estacionarias en cuerda">
+    <p><b>Ejemplo:</b> Una cuerda de 1 m fija en ambos extremos puede vibrar en su modo fundamental con \( \lambda = 2L = 2 \) m.</p>
+    <p>Si \( v = 100 \, m/s \), entonces:</p>
+    <p>
+      \[ f = \frac{v}{\lambda} = \frac{100}{2} = 50 \text{ Hz} \]
+    </p>
+  </div>
+<div className="flex justify-center items-center min-h-screen bg-background p-4">
+  <svg
+    width="1024"
+    height="350"
+    viewBox="0 0 400 200"
+    className="w-full max-w-lg"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    {/* Fondo */}
+    <rect 
+      width="100%" 
+      height="100%" 
+      fill="hsl(220, 60%, 98%)" 
+    />
+
+    {/* Eje de referencia */}
+    <line 
+      x1="0" 
+      y1="100" 
+      x2="400" 
+      y2="100" 
+      stroke="hsl(220, 13%, 70%)" 
+      strokeWidth="1" 
+    />
+
+    {/* Onda 1 */}
+    <path
+      d="M 0,100 Q 100,50 200,100 T 400,100"
+      fill="none"
+      stroke="hsl(217, 91%, 60%)"
+      strokeWidth="3"
+      strokeLinecap="round"
+    >
+      <animate
+        attributeName="d"
+        values="
+          M 0,100 Q 100,50 200,100 T 400,100;
+          M 0,100 Q 100,150 200,100 T 400,100;
+          M 0,100 Q 100,50 200,100 T 400,100
+        "
+        dur="2s"
+        repeatCount="indefinite"
+      />
+    </path>
+
+    {/* Onda 2 */}
+<path
+  d="M 0,100 Q 200,30 400,100"
+  fill="none"
+  stroke="hsl(221, 83%, 53%)"
+  strokeWidth="3"
+  strokeLinecap="round"
+>
+  <animate
+    attributeName="d"
+    values="
+      M 0,100 Q 200,30 400,100;
+      M 0,100 Q 200,170 400,100;
+      M 0,100 Q 200,30 400,100
+    "
+    dur="1s"
+    repeatCount="indefinite"
+  />
+</path>
+
+    {/* Onda 3 */}
+    <path
+      d="M 0,100 Q 50,120 100,100 Q 150,80 200,100 Q 250,120 300,100 Q 350,80 400,100"
+      fill="none"
+      stroke="hsl(222, 84%, 45%)"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+    >
+      <animate
+        attributeName="d"
+        values="
+          M 0,100 Q 50,120 100,100 Q 150,80 200,100 Q 250,120 300,100 Q 350,80 400,100;
+          M 0,100 Q 50,80 100,100 Q 150,120 200,100 Q 250,80 300,100 Q 350,120 400,100;
+          M 0,100 Q 50,120 100,100 Q 150,80 200,100 Q 250,120 300,100 Q 350,80 400,100
+        "
+        dur="3s"
+        repeatCount="indefinite"
+      />
+    </path>
+  </svg>
+</div>
+</section>
+
+<section id="cuerda-instrumento" tabindex="-1">
+  <h2>¿Cómo oscila una cuerda en un instrumento musical?</h2>
+  <p>
+    Una cuerda fija en sus extremos solo puede vibrar de manera que en los puntos de sujeción se formen <strong>nodos</strong> (puntos sin movimiento).
+    Entre ellos aparecen <strong>antinodos</strong> (puntos de máxima amplitud). Estos patrones de vibración se llaman <em>modos normales</em> o <em>modos armónicos</em>.
+  </p>
+  <p>
+    El modo más sencillo es la <strong>frecuencia fundamental</strong> o primer armónico, en la cual la cuerda vibra como un solo segmento. Los siguientes modos corresponden a múltiplos enteros de esa frecuencia y producen los <strong>armónicos superiores</strong>.
+  </p>
+  <p>La longitud de onda de cada armónico en una cuerda de longitud <em>L</em> es:</p>
+  <ul>
+    <li>1er armónico (fundamental): <span>\(\lambda_1 = 2L\)</span></li>
+    <li>2do armónico: <span>\(\lambda_2 = L\)</span></li>
+    <li>3er armónico: <span>\(\lambda_3 = \tfrac{2}{3}L\)</span></li>
+    <li>n-ésimo armónico: <span>\(\lambda_n = \tfrac{2L}{n}\)</span></li>
+  </ul>
+  <p>La frecuencia de cada armónico se calcula con la relación:</p>
+  <p class="formula"> 
+    \[ f_n = \frac{n \cdot v}{2L} \] <br>
+    Donde: <br>
+    • \( f_n \) = frecuencia del n-ésimo armónico <br>
+    • \( n \) = número del armónico (1, 2, 3, …) <br>
+    • \( v \) = velocidad de propagación de la onda <br>
+    • \( L \) = longitud de la cuerda
+  </p>
+
+  <h3>Ejemplo</h3>
+  <p>Una cuerda de guitarra mide \(0.65 \, m\) y la onda se propaga en ella a \(v = 130 \, m/s\).</p>
+  <p>La frecuencia fundamental será:</p>
+  <p class="formula"> \[ f_1 = \frac{1 \cdot 130}{2 \cdot 0.65} = 100 \, Hz \] </p>
+</section>
+
+<section id="velocidad-cuerda" tabindex="-1">
+  <h2>Velocidad de las ondas en una cuerda</h2>
+  <p>
+    La <strong>velocidad de propagación</strong> de una onda en una cuerda depende de dos factores: la <em>tensión</em> aplicada y la <em>densidad lineal de masa</em> de la cuerda.
+  </p>
+  <p class="formula" aria-label="Fórmula de velocidad en cuerda"> 
+    \[ v = \sqrt{\frac{T}{\mu}} \] <br>
+    Donde: <br>
+    • \( v \) = velocidad de propagación de la onda <br>
+    • \( T \) = tensión de la cuerda (N) <br>
+    • \( \mu \) = densidad lineal de masa (kg/m), con \( \mu = \tfrac{m}{L} \) <br>
+    • \( m \) = masa de la cuerda <br>
+    • \( L \) = longitud de la cuerda
+  </p>
+  <img src="Instrumento.png" alt="Instrumento" style="width: 700px; height: auto;">
+</section>
+
+<section id="tubos" tabindex="-1">
+  <h2>Modos Normales en Tubos Sonoros</h2>
+
+  <h3>Tubo cerrado</h3>
+  <div class="formula" aria-label="Fórmula para tubo cerrado">
+    \[ f_n = \frac{n \cdot v}{4L}, \quad n = 1, 3, 5, \dots \] <br>
+    Donde: <br>
+    • \( f_n \) = frecuencia del n-ésimo armónico <br>
+    • \( n \) = número impar del armónico (1, 3, 5, …) <br>
+    • \( v \) = velocidad del sonido en el aire <br>
+    • \( L \) = longitud del tubo
+  </div>
+<img src="tubo cerrado.png" alt="Imagen 1" height="211px" width="1024px">
+  <h3>Tubo abierto</h3>
+  <div class="formula" aria-label="Fórmula para tubo abierto">
+    \[ f_n = \frac{n \cdot v}{2L}, \quad n = 1, 2, 3, \dots \] <br>
+    Donde: <br>
+    • \( f_n \) = frecuencia del n-ésimo armónico <br>
+    • \( n \) = número natural del armónico (1, 2, 3, …) <br>
+    • \( v \) = velocidad del sonido en el aire <br>
+    • \( L \) = longitud del tubo
+  </div>
+  <img src="tubo abierto.jpg" alt="Imagen 1">
+</section>
+  <section id="voz" tabindex="-1">
+    <h2>¿Cómo se produce la voz? ¿Cómo llega el sonido a nuestros oídos?</h2>
+<p>
+  La voz se genera gracias a la vibración de las cuerdas vocales en la laringe, que funcionan como una cuerda vibrante y un tubo resonante al mismo tiempo.
+  El aire proveniente de los pulmones pone en vibración las cuerdas vocales, y la cavidad bucal y nasal actúan como resonadores que amplifican y modifican el sonido.
+</p>
+<p>
+  Una vez producido, el sonido viaja en forma de ondas a través del aire y llega a nuestros oídos. Allí se produce un proceso en tres etapas:
+</p>
+<ul>
+  <li><b>Oído externo:</b> El pabellón auricular y el conducto auditivo captan y dirigen las ondas sonoras hacia el tímpano.</li>
+  <li><b>Oído medio:</b> El tímpano vibra y transmite esas vibraciones a través de los huesecillos (martillo, yunque y estribo), que amplifican la señal.</li>
+  <li><b>Oído interno:</b> Las vibraciones llegan a la cóclea, donde las células ciliadas transforman la energía mecánica en impulsos nerviosos que viajan por el nervio auditivo hasta el cerebro.</li>
+</ul>
+<p>
+  Gracias a este proceso podemos no solo percibir la intensidad y tono de la voz, sino también distinguir timbres, palabras y emociones.
+</p>
+<div class="example" aria-label="Ejemplo de la producción de la voz">
+  <p><b>Ejemplo:</b> Supongamos que las cuerdas vocales producen un sonido fundamental de 120 Hz.</p>
+  <p>
+    Los armónicos generados son múltiplos enteros: 240 Hz, 360 Hz, 480 Hz, etc. La cavidad bucal amplifica ciertos armónicos, lo que forma los <em>formantes</em> y permite distinguir las vocales.
+  </p>
+</div>
+<p>
+  En conclusión, la voz es el resultado de un sistema complejo de vibraciones, resonancias y procesamiento auditivo que convierte simples ondas sonoras en comunicación humana.
+  Los siguientes videos lo explican de manera más clara y visual:
+</p>
+<div class="voz">
+  <img src="Ondas.png" alt="Imagen 1">
+  <img src="Voz.png" alt="Imagen 2" style="width: 430px;">
+  <video width="100%" height="100%" controls>
+  <source src="video_sonido.mp4" type="video/mp4">
+</video>
+  <video width="100%" height="auto" controls>
+  <source src="Oido.Fisica.mp4" type="video/mp4">
+</video>
+</div>
+
+<style>
+  .voz {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 1rem; 
+    max-width: 800px;
+    margin: auto;
+  }
+
+  .voz > img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px; /* opcional */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15); /* opcional */
+  }
+</style>
+  </section>
+
+  <section id="summary" tabindex="-1">
+    <h2>Resumen</h2>
+    <ul>
+      <li>El <b>efecto Doppler</b> explica cómo la frecuencia cambia si hay movimiento relativo entre fuente y observador.</li>
+      <li>Las <b>ondas estacionarias</b> se forman en cuerdas y tubos por la superposición de ondas en direcciones opuestas.</li>
+      <li>Una <b>cuerda en un instrumento</b> oscila en modos normales, generando armónicos que forman la música.</li>
+      <li>La <b>velocidad en una cuerda</b> depende de la tensión y de la densidad lineal de masa.</li>
+      <li>Los <b>tubos sonoros</b> (abiertos o cerrados) presentan diferentes frecuencias de resonancia.</li>
+      <li>La <b>voz humana</b> se produce por la vibración de cuerdas vocales y la resonancia en las cavidades bucales y nasales.</li>
+    </ul>
+  </section>
+
+  <section id="questions" tabindex="-1">
+    <!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Acustica II</title>
+  <style>
+    body {
+  margin: 0;
+  font-family: 'Merriweather', serif;
+  font-size: 1.15rem;        
+  background: linear-gradient(180deg, #f9f9f9 0%, #eef2ff 100%);
+  color: #222;
+  line-height: 1.7;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  scroll-behavior: smooth;
+}
+
+h1 {
+  font-size: 3rem;           
+  text-align: center;
+  margin: 2rem 0 1.5rem 0;
+  animation: fadeInDown 1s ease;
+}
+
+h2 {
+  font-size: 2.5rem;       
+  border-bottom: 3px solid #3a86ff;
+  padding-bottom: 0.4rem;
+  margin-top: 2rem;
+}
+
+h3 {
+  font-size: 2rem;       
+  margin-top: 1.5rem;
+  color: #333;
+}
+
+p {
+  margin-bottom: 0.5rem;
+  font-size: 1.7rem;     
+  max-width: 900px;
+  line-height: 1.9;
+}
+
+li {
+  font-size: 1.7rem
+}
+    .question {
+      margin-bottom: 20px;
+    }
+    .correct {
+      color: green;
+      font-weight: bold;
+    }
+    .incorrect {
+      color: red;
+      font-weight: bold;
+    }
+    .respuestas{
+    display: inline-block;
+    padding: 12px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    box-shadow: 0 6px 14px rgba(79, 172, 254, 0.4);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    border: none;
+  }
+  </style>
+    <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']]
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+<section id="questions" tabindex="-1">
+  <h2>Preguntas de repaso</h2>
+  <form id="quizForm">
+    <div class="question">
+      <p>1. ¿Qué diferencia hay entre el tono percibido de una sirena que se acerca y una que se aleja?</p>
+      <label><input type="radio" name="q1" value="a"> No hay diferencia, siempre suena igual</label><br>
+      <label><input type="radio" name="q1" value="b"> Al acercarse el tono es más bajo y al alejarse más alto</label><br>
+      <label><input type="radio" name="q1" value="c"> Al acercarse el tono es más alto y al alejarse más bajo</label><br>
+      <label><input type="radio" name="q1" value="d"> El tono cambia aleatoriamente</label>
+    </div>
+
+    <div class="question">
+      <p>2. ¿Cómo se forman los nodos y antinodos en una cuerda fija por ambos extremos?</p>
+      <label><input type="radio" name="q2" value="a"> Por interferencia constructiva y destructiva de ondas</label><br>
+      <label><input type="radio" name="q2" value="b"> Por la reflexión sin interferencia</label><br>
+      <label><input type="radio" name="q2" value="c"> Porque la cuerda vibra solo en los extremos</label><br>
+      <label><input type="radio" name="q2" value="d"> Porque la cuerda no vibra nunca</label>
+    </div>
+
+    <div class="question">
+      <p>3. Si una cuerda tiene una tensión de 80 N y densidad lineal de 0.02 kg/m, ¿cuál es la velocidad de la onda?</p>
+      <label><input type="radio" name="q3" value="a"> 20 m/s</label><br>
+      <label><input type="radio" name="q3" value="b"> 40 m/s</label><br>
+      <label><input type="radio" name="q3" value="c"> 63.25 m/s</label><br>
+      <label><input type="radio" name="q3" value="d"> 100 m/s</label>
+    </div>
+
+    <div class="question">
+      <p>4. ¿Por qué en un tubo cerrado solo se permiten armónicos impares?</p>
+      <label><input type="radio" name="q4" value="a"> Porque la onda se destruye en los pares</label><br>
+      <label><input type="radio" name="q4" value="b"> Porque el extremo cerrado obliga a un nodo y el abierto a un antinodo</label><br>
+      <label><input type="radio" name="q4" value="c"> Porque el aire no vibra en los armónicos pares</label><br>
+      <label><input type="radio" name="q4" value="d"> Porque depende de la temperatura</label>
+    </div>
+
+    <div class="question">
+      <p>5. ¿Qué semejanza existe entre la producción de la voz y un tubo sonoro?</p>
+      <label><input type="radio" name="q5" value="a"> Ambos generan sonido por medio de cuerdas metálicas</label><br>
+      <label><input type="radio" name="q5" value="b"> Ambos producen sonido por vibraciones de aire en cavidades</label><br>
+      <label><input type="radio" name="q5" value="c"> Ambos funcionan con electricidad</label><br>
+      <label><input type="radio" name="q5" value="d"> No existe semejanza</label>
+    </div>
+
+    <button type="button" class="respuestas" onclick="checkAnswers()">Enviar respuestas</button>
+  </form>
+  
+  <div id="results"></div>
+</section>
+
+<script>
+  function checkAnswers() {
+    const correctAnswers = {
+      q1: "c",
+      q2: "a",
+      q3: "c",
+      q4: "b",
+      q5: "b"
+    };
+
+    // Explicaciones: por cada pregunta y opción
+    const explanations = {
+      q1: {
+        a: "Incorrecto. El efecto Doppler indica que sí hay diferencia.",
+        b: "Incorrecto. Es al revés: al acercarse es más alto, al alejarse más bajo.",
+        c: "Correcto. El efecto Doppler provoca que al acercarse el tono sea más agudo y al alejarse más grave.",
+        d: "Incorrecto. El cambio no es aleatorio, sigue el efecto Doppler."
+      },
+      q2: {
+        a: "Correcto. Los nodos y antinodos se forman por la interferencia constructiva y destructiva de ondas estacionarias.",
+        b: "Incorrecto. No es solo reflexión, la interferencia es la que genera nodos y antinodos.",
+        c: "Incorrecto. No solo vibran los extremos, toda la cuerda participa en los modos normales.",
+        d: "Incorrecto. La cuerda sí vibra en ciertas frecuencias resonantes."
+      },
+      q3: {
+        a: "Incorrecto. Aplica la fórmula v = √(T/μ). Aquí da un valor mayor.",
+        b: "Incorrecto. 40 m/s es demasiado bajo, revisa el cálculo.",
+        c: "Correcto. v = √(80 / 0.02) = √4000 ≈ 63.25 m/s.",
+        d: "Incorrecto. 100 m/s es demasiado alto para esos valores."
+      },
+      q4: {
+        a: "Incorrecto. No se destruyen, sino que la condición de nodo y antinodo selecciona los armónicos.",
+        b: "Correcto. Un extremo cerrado impone un nodo y el abierto un antinodo, lo que solo permite armónicos impares.",
+        c: "Incorrecto. El aire vibra en todos, pero solo se cumplen las condiciones en los impares.",
+        d: "Incorrecto. La temperatura afecta la velocidad del sonido, no la existencia de armónicos pares o impares."
+      },
+      q5: {
+        a: "Incorrecto. La voz no se produce con cuerdas metálicas, sino con cuerdas vocales.",
+        b: "Correcto. Tanto la voz como un tubo sonoro producen sonidos por vibración del aire en cavidades.",
+        c: "Incorrecto. Ninguno depende de electricidad directamente.",
+        d: "Incorrecto. Sí existe semejanza, ambos funcionan por resonancia del aire."
+      }
+    };
+
+    const resultsDiv = document.getElementById("results");
+    resultsDiv.innerHTML = "";
+    let score = 0;
+
+    for (let q in correctAnswers) {
+      const answer = document.querySelector(`input[name="${q}"]:checked`);
+      const p = document.createElement("p");
+
+      if (answer) {
+        if (answer.value === correctAnswers[q]) {
+          p.textContent = `${q.toUpperCase()}: ¡Correcto! ${explanations[q][answer.value]}`;
+          p.className = "correct";
+          score++;
+        } else {
+          p.textContent = `${q.toUpperCase()}: Incorrecto. ${explanations[q][answer.value]} La respuesta correcta es "${correctAnswers[q].toUpperCase()}": ${explanations[q][correctAnswers[q]]}`;
+          p.className = "incorrect";
+        }
+      } else {
+        p.textContent = `${q.toUpperCase()}: No seleccionaste ninguna opción. La correcta era "${correctAnswers[q].toUpperCase()}": ${explanations[q][correctAnswers[q]]}`;
+        p.className = "incorrect";
+      }
+      resultsDiv.appendChild(p);
+    }
+
+    const finalScore = document.createElement("h3");
+    finalScore.textContent = `Tu puntuación: ${score} / ${Object.keys(correctAnswers).length}`;
+    resultsDiv.appendChild(finalScore);
+  }
+</script>
+</body>
+</html>
+  </section>
+</main>
+  <footer>
+    <div class="footer-container">
+      <div class="social-icons">
+        <a href="https://www.instagram.com/jmflorez__71/" target="_blank"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram tuyo" /></a>
+        <a href="https://www.instagram.com/rave.437/" target="_blank"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram compañero" /></a>
+      </div>
+      <div class="bibliografia">
+      <a href="Citas-Bibliograficas.pdf" target="_blank" rel="noopener noreferrer">
+        📄 Ver Citas Bibliográficas (PDF)
+      </a>
+    </div>
+    </div>
+  </footer>
+<script>
+    const navLinks = document.querySelectorAll("nav a");
+    navLinks.forEach(link => {
+      link.addEventListener("click", () => {
+        navLinks.forEach(l => l.classList.remove("active"));
+        link.classList.add("active");
+      });
+    });
+  </script>
+  </body>
+</html>

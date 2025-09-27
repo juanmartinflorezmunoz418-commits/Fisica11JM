@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- 🔹 METADATOS BÁSICOS -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Laboratorios Interactivos</title>
+
+  <!-- 🔹 TIPOGRAFÍA -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+
+  <!-- 🔹 ESTILOS EXTERNOS -->
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- 🔹 POLYFILL PARA COMPATIBILIDAD -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+  <!-- 🔹 ESTILOS INTERNOS (customizados para esta página) -->
+  <style>
+    /* ------------------------- */
+    /* TEMA OSCURO */
+    /* ------------------------- */
+    body.dark-mode {
+    background: linear-gradient(180deg, #1a1a1a 0%, #2c2c2c 100%);
+    color: #f1f1f1;
+  }
+
+  body.dark-mode h1,  
+  body.dark-mode h3 {
+    color: #ffffff;
+  }
+
+  body.dark-mode nav {
+    background: #111827;
+  }
+
+  body.dark-mode .dropbtn {
+    background: #2563eb;
+  }
+
+  body.dark-mode .dropdown-content {
+    background: #1f2937;
+  }
+
+  body.dark-mode .dropdown-content a {
+    color: #f9fafb;
+  }
+
+  body.dark-mode .dropdown-content a:hover {
+    background-color: #374151;
+  }
+
+  body.dark-mode .formula {
+    background: #2d3748;
+    border-left: 6px solid #60a5fa;
+    color: #fbbf24;
+  }
+
+  body.dark-mode .example {
+    background: #1f2937;
+    border-left: 6px solid #f87171;
+    color: #f3f4f6;
+  }
+
+  body.dark-mode footer {
+    background: #111827;
+  }
+
+  body.dark-mode .bibliografia a {
+    background: #2563eb;
+  }
+
+    body.dark-mode h2{
+    color: #000;
+  }
+
+    /* ------------------------- */
+    /* RESET Y BASE */
+    /* ------------------------- */
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Merriweather', serif;
+      background: linear-gradient(180deg, #f9f9f9 0%, #eef2ff 100%);
+      color: #222;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+h1 {
+  font-size: 3rem;           
+  text-align: center;
+  margin: 2rem 0 1.5rem 0;
+  animation: fadeInDown 1s ease;
+}
+
+h2 {
+  font-size: 2.5rem;       
+  border-bottom: 3px solid #3a86ff;
+  padding-bottom: 0.4rem;
+  margin-top: 2rem;
+}
+
+p {
+  margin-bottom: 1rem;
+  font-size: 1.5rem ;
+  max-width:100%;
+  line-height: 1.9;
+}
+
+    main {
+      flex-grow: 1;
+      max-width: 1000px;
+      margin: 0 auto 3rem auto;
+      padding: 0 1.5rem;
+    }
+
+    /* ------------------------- */
+    /* NAVBAR Y DROPDOWN */
+    /* ------------------------- */
+    nav {
+      background: #3a86ff;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.7rem 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+    }
+
+    .dropdown { position: relative; display: inline-block; }
+
+    .dropbtn {
+      display: inline-block;
+      padding: 12px 28px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      box-shadow: 0 6px 14px rgba(79, 172, 254, 0.4);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      border: none; /* 🔹 para que no tenga borde */
+    }
+    .dropbtn:hover {
+      background: #1e40af;
+      transform: translateY(-2px);
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background: #fff;
+      min-width: 220px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      border-radius: 10px;
+      overflow: hidden;
+      z-index: 1000;
+    }
+    .dropdown-content a {
+      color: #1a1a1a;
+      padding: 0.8rem 1rem;
+      text-decoration: none;
+      display: block;
+      transition: background 0.3s ease;
+    }
+    .dropdown-content a:hover {
+      background: #eef2ff;
+      color: #3a86ff;
+    }
+    .dropdown:hover .dropdown-content { display: block; }
+
+    /* ------------------------- */
+    /* BOTONES PERSONALIZADOS */
+    /* ------------------------- */
+    .btn-lab {
+      display: inline-block;
+      padding: 12px 28px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      box-shadow: 0 6px 14px rgba(79, 172, 254, 0.4);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      border: none; 
+    }
+    .btn-lab::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: skewX(-20deg);
+      transition: left 0.5s ease;
+    }
+    .btn-lab:hover::before { left: 100%; }
+    .btn-lab:hover {
+      transform: translateY(-4px) scale(1.05);
+      box-shadow: 0 8px 18px rgba(79, 172, 254, 0.6);
+    }
+    .btn-lab:active {
+      transform: translateY(0) scale(0.97);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    /* ------------------------- */
+    /* TARJETAS DE LABORATORIOS */
+    /* ------------------------- */
+    .lab-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .lab-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-align: center;
+    }
+    .lab-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.15);
+    }
+    .lab-card h2 {
+      margin-bottom: 0.8rem;
+      font-size: 1.4rem;
+      color: #1e40af;
+    }
+    .lab-card p {
+      font-size: 1rem;
+      color: #444;
+      margin-bottom: 1.2rem;
+    }
+.navbar {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  padding: 0.5rem 1rem;
+}
+
+.nav-left,
+.nav-center,
+.nav-right {
+  flex: 1; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Alineaciones específicas */
+.nav-left {
+  justify-content: flex-start;
+}
+
+.nav-center {
+  justify-content: center;
+}
+
+.nav-right {
+  justify-content: flex-end;
+}
+    /* ------------------------- */
+    /* ANIMACIONES */
+    /* ------------------------- */
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+<nav aria-label="Menú de navegación principal" class="navbar">
+  <!-- Izquierda -->
+  <div class="nav-left">
+    <button id="theme-toggle" class="btn-lab" aria-label="Cambiar tema">🌙</button>
+  </div>
+
+  <!-- Derecha -->
+  <div class="nav-right">
+    <a href="laboratorios.html" class="btn-lab" aria-label="Ir a la sección de laboratorios">🔬 Laboratorios</a>
+  </div>
+
+<script>
+  const toggleBtn = document.getElementById("theme-toggle");
+  const body = document.body;
+
+  toggleBtn.addEventListener("click", () => {
+    body.classList.toggle("dark-mode");
+
+    if (body.classList.contains("dark-mode")) {
+      toggleBtn.textContent = "☀️";
+    } else {
+      toggleBtn.textContent = "🌙";
+    }
+  });
+</script>
+  </nav>
+
+  <main>
+    <h1>Laboratorios Interactivos</h1>
+    <p style="text-align:center;">En los siguientes enlaces accederás a PhET, donde podrás practicar lo aprendido mediante simulaciones interactivas.
+<div class="lab-cards">
+      <div class="lab-card">
+        <h2>Cuerda vibrando</h2>
+        <p>Explora cómo la tensión, frecuencia y amortiguamiento afectan la propagación de ondas en una cuerda.</p>
+        <a href="https://phet.colorado.edu/sims/html/wave-on-a-string/latest/wave-on-a-string_all.html?locale=es" target="_blank" class="btn-lab">Abrir laboratorio</a>
+      </div>
+
+      <div class="lab-card">
+        <h2>Introduccion a las Ondas</h2>
+        <p>Observa los diferentes tipos de ondas que se pueden obtener en diferentes fuentes como el agua, la luz y el sonido.</p>
+        <a href="https://phet.colorado.edu/sims/html/waves-intro/latest/waves-intro_all.html?locale=es" target="_blank" class="btn-lab">Abrir laboratorio</a>
+      </div>
+<div class="lab-card">
+        <h2>Ondas sonoras</h2>
+        <p>Analiza cómo las ondas sonoras se propagan, cambian con la frecuencia y se perciben en distintos medios.</p>
+        <a href="https://phet.colorado.edu/sims/html/sound-waves/latest/sound-waves_all.html?locale=es" target="_blank" class="btn-lab">Abrir laboratorio</a>
+      </div>
+    </div>
+
+    <div style="margin-top:2rem; text-align:center;">
+      <a href="Acustica_II.html" class="btn-lab">⬅ Volver al inicio</a>
+    </div>
+  </main>
+
+</body>
+</html>
